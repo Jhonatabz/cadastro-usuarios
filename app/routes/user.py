@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from models.user import User, UserPublic, UserDB
+from models.user import User, UserPublic, UserDB, UserList
 from db.database import database
 
 templates = Jinja2Templates(directory='templates')
@@ -25,3 +25,7 @@ async def create_user(
     )
     database.append(user_with_id)
     return user_with_id
+
+@router.get('/usuarios', response_model=UserList)
+async def read_user(request: Request):
+    return templates.TemplateResponse("usuarios.html", {"request": request, "users": database})

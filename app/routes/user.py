@@ -9,23 +9,35 @@ templates = Jinja2Templates(directory='templates')
 router = APIRouter()
 
 @router.get("/", response_class=HTMLResponse)
-async def mostrar_formulario(request: Request):
+async def form(request: Request):
     return templates.TemplateResponse("cadastro.html", {"request": request})
 
-@router.post('/cadastrar', response_model=UserPublic)
-async def create_user(
+@router.post('/cadastrar', response_class=HTMLResponse)
+async def create_user(request: Request,
     nome: str = Form(...),
     email: str = Form(...),
     senha: str = Form(...)
 ):
     user = User(nome=nome, email=email, senha=senha)
+
+    email_existe = any(user.email == email for user in database)
+    if email_existe:
+        return templates.TemplateResponse(
+            "erro.html",
+            {"request": request, "user": user},
+            status_code=400
+        )
+
     user_with_id = UserDB(
         id= len(database) + 1,
         **user.model_dump()
     )
     database.append(user_with_id)
-    return user_with_id
 
-@router.get('/usuarios', response_model=UserList)
+    user_public = UserPublic(**user_with_id.model_dump(exclude={'senha'}))
+    return templates.TemplateResponse("resposta.html", {"request": request, "user": user_public.model_dump()})
+
+@router.get('/usuarios', response_class=HTMLResponse)
 async def read_user(request: Request):
-    return templates.TemplateResponse("usuarios.html", {"request": request, "users": database})
+    users_safe = [user.model_dump(exclude={"senha"}) for user in database]
+    return templates.TemplateResponse("usuarios.html", {"request": request, "users": users_safe})

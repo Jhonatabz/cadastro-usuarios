@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuário Cadastrado com Sucesso!</title>
+    <title>Email já Cadastrado</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,24 +53,20 @@
     </style>
 </head>
 <body>
-    <h1>Usuário Cadastrado!</h1>
+    <h1>Erro! Email já Cadastrado!</h1>
 
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Nome</th>
                 <th>Email</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.nome }}</td>
-                <td>{{ user.email }}</td>
+                <td>{{ email }}</td>
             </tr>
         </tbody>
     </table>
-    <a href="/">Voltar para o Cadastro</a>
+    <a href="/usuario/cadastrar">Voltar para o Cadastro</a>
 </body>
 </html>

@@ -1,0 +1,53 @@
+# Bytecode do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambientes virtuais
+env/
+venv/
+ENV/
+.venv/
+.ENV/
+
+# Arquivos de configuração e credenciais
+*.env
+*.env.*
+
+# IDEs e editores
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Arquivos temporários
+*.tmp
+*.bak
+*.swp
+*~
+
+# Banco de dados local (se estiver usando SQLite, por exemplo)
+*.sqlite3
+*.db
+
+# Testes (pytest cache)
+.pytest_cache/
+.tox/
+.coverage
+coverage.xml
+htmlcov/
+
+# mypy
+.mypy_cache/
+
+# Sistema operacional (Windows e outros)
+Thumbs.db
+ehthumbs.db
+.DS_Store
+desktop.ini
+
+# Dist e builds (em caso de empacotar)
+build/
+dist/
+*.egg-info/

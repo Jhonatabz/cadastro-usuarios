@@ -6,27 +6,30 @@
     <title>Login de Usuários</title>
     <style>
         body {
-                
             font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f9f9f9;
+            background-color: #d3d3d3; /* cinza claro */
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        form {
-            background-color: white;
+        .container {
+            background-color: #f9f4f4;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            margin-bottom: 20px;
+            width: 400px;
+            text-align: center;
         }
-
 
         button {
             background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 10px;
+            margin-bottom: 5px;
             border-radius: 5px;
             cursor: pointer;
             width: 100%;
@@ -47,9 +50,9 @@
             text-decoration: none;
             background-color: #4CAF50;
             color: white;
-            padding: 10px 15px;
+            padding: 10px;
             border-radius: 5px;
-            width: 400px;
+            width: 380px;
         }
 
         .link-button:hover {
@@ -58,14 +61,16 @@
     </style>
 </head>
 <body>
-    <h1>Home</h1>
+    <div class="container">
+        <h1>Home</h1>
 
-    <form action="/usuario/login" method="get">
-        <button type="submit">Usuário</button>
-    </form>
+        <form action="/usuario/login" method="get">
+            <button type="submit">Usuário</button>
+        </form>
 
-    <form action="/admin/login" method="get">
-        <button type="submit">Administrador</button>
-    </form>
+        <form action="/admin/login" method="get">
+            <button type="submit">Administrador</button>
+        </form>
+    </div>
 </body>
 </html>

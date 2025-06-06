@@ -15,7 +15,7 @@ async def login_admin(request: Request):
 async def create_admin(request: Request):
     return templates.TemplateResponse("cadastro.html", {"request": request})
 
-@admin_app.get('usuario/usuarios', response_class=HTMLResponse, status_code=201)
+@admin_app.get("/admin/usuarios")
 async def read_user(request: Request):
     users_safe = [user.model_dump(exclude={"senha"}) for user in database]
     return templates.TemplateResponse("usuarios.html", {"request": request, "users": users_safe})

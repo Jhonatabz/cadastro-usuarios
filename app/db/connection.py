@@ -1,10 +1,8 @@
 import sqlite3
 
-# Conectar ao banco
 def conectar():
     return sqlite3.connect("app/db/database.db")
 
-# Criar a tabela
 def criar_tabela():
     conn = conectar()
     cursor = conn.cursor()
@@ -12,22 +10,24 @@ def criar_tabela():
     CREATE TABLE IF NOT EXISTS usuarios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
-        email TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
         senha TEXT NOT NULL
     )
     """)
     conn.commit()
     conn.close()
 
-# Inserir usuário
 def inserir_usuario(nome, email, senha):
     conn = conectar()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)", (nome, email, senha))
-    conn.commit()
-    conn.close()
+    try:
+        cursor.execute("INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)", (nome, email, senha))
+        conn.commit()
+    except sqlite3.IntegrityError:
+        return True
+    finally:
+        conn.close()
 
-# Buscar todos os usuários
 def buscar_usuarios():
     conn = conectar()
     cursor = conn.cursor()
@@ -36,7 +36,6 @@ def buscar_usuarios():
     conn.close()
     return usuarios
 
-# Atualizar um usuário
 def atualizar_usuario(id, novo_nome, novo_email, nova_senha):
     conn = conectar()
     cursor = conn.cursor()
@@ -44,7 +43,6 @@ def atualizar_usuario(id, novo_nome, novo_email, nova_senha):
     conn.commit()
     conn.close()
 
-# Deletar um usuário
 def deletar_usuario(id):
     conn = conectar()
     cursor = conn.cursor()

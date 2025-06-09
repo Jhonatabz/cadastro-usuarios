@@ -12,13 +12,13 @@ user_app = APIRouter()
 async def login_form(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
-@user_app.post("/usuario/login")
-async def login_user(request: Request):
-    return templates.TemplateResponse("login_response.html", {"request": request})
-
 @user_app.get("/usuario/cadastrar", response_class=HTMLResponse, status_code=201)
 async def cadastrar_form(request: Request):
     return templates.TemplateResponse("cadastro.html", {"request": request})
+
+@user_app.post("/usuario/login")
+async def login_user(request: Request):
+    return templates.TemplateResponse("login_response.html", {"request": request})
 
 @user_app.post('/usuario/cadastrar', response_class=HTMLResponse, status_code=200)
 async def create_user(request: Request,
@@ -26,5 +26,8 @@ async def create_user(request: Request,
     email: str = Form(...),
     senha: str = Form(...)
 ):
-    database.inserir_usuario(nome, email, senha)
-    return templates.TemplateResponse("cadastro_response.html", {"request": request, "user": {"nome": nome, "email": email}})
+    inserir = database.inserir_usuario(nome, email, senha)
+    if inserir:
+        return templates.TemplateResponse("cadastro_error.html", {"request": request, "email": email})
+    else:
+        return templates.TemplateResponse("cadastro_response.html", {"request": request, "user": {"nome": nome, "email": email}})

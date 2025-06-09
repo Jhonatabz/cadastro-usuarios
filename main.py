@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from app.routes import home, user, admin
 import uvicorn
+import app.db.connection as database
 
+database.conectar()
+database.criar_tabela()
 
 app = FastAPI()
 

@@ -1,4 +1,5 @@
 import sqlite3
+import hashlib
 
 def conectar():
     return sqlite3.connect("app/db/database.db")
@@ -11,7 +12,7 @@ def criar_tabela():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
-        senha TEXT NOT NULL
+        senha_hash TEXT NOT NULL
     )
     """)
     conn.commit()
@@ -20,13 +21,30 @@ def criar_tabela():
 def inserir_usuario(nome, email, senha):
     conn = conectar()
     cursor = conn.cursor()
+    senha_hash = hashlib.sha256(senha.encode()).hexdigest()
     try:
-        cursor.execute("INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)", (nome, email, senha))
+        cursor.execute("INSERT INTO usuarios (nome, email, senha_hash) VALUES (?, ?, ?)", (nome, email, senha_hash))
         conn.commit()
     except sqlite3.IntegrityError:
         return True
     finally:
         conn.close()
+
+def verificar_login(email, senha):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT senha_hash FROM usuarios WHERE email = ?', (email,))
+    resultado = cursor.fetchone()
+
+    conn.close()
+
+    if resultado:
+        senha_hash = resultado[0]
+        senha_informada_hash = hashlib.sha256(senha.encode()).hexdigest()
+        if senha_hash == senha_informada_hash:
+            return True
+    return False
 
 def buscar_usuarios():
     conn = conectar()

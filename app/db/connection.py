@@ -25,8 +25,9 @@ def inserir_usuario(nome, email, senha):
     try:
         cursor.execute("INSERT INTO usuarios (nome, email, senha_hash) VALUES (?, ?, ?)", (nome, email, senha_hash))
         conn.commit()
-    except sqlite3.IntegrityError:
         return True
+    except sqlite3.IntegrityError:
+        return False
     finally:
         conn.close()
 

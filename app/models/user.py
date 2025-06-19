@@ -4,11 +4,6 @@ class User(BaseModel):
     nome: str
     email: EmailStr
     senha: str
-
-class UserPublic(BaseModel):
-    id: int
-    nome: str
+class UserVerify(BaseModel):
     email: EmailStr
-
-class UserDB(User):
-    id: int
+    senha: str

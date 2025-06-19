@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
-from app.db.users_database import database
 
 templates = Jinja2Templates(directory="app/templates/admin")
 
@@ -16,5 +15,4 @@ async def create_admin(request: Request):
 
 @admin_app.get("/admin/usuarios")
 async def read_user(request: Request):
-    users_safe = [user.model_dump(exclude={"senha"}) for user in database]
-    return templates.TemplateResponse("usuarios.html", {"request": request, "users": users_safe})
+    return templates.TemplateResponse("usuarios.html", {"request": request})

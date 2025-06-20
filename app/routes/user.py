@@ -22,7 +22,7 @@ async def login_user(request: Request,
     senha: str = Form(...)
 ):
     user = UserVerify(email=email, senha=senha)
-    verificacao = database.verificar_login(**user.model_dump())
+    verificacao = database.verificar_login_usuario(**user.model_dump())
     if verificacao:
         return templates.TemplateResponse("login_response.html", {"request": request})
     else: 

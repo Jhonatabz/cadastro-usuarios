@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from app.routes import home, user, admin
 import uvicorn
-import app.db.connection as database
+import app.db._connection as database
 
-database.conectar()
-database.criar_tabela()
+database.conectar_usuarios()
+database.criar_tabela_usuarios()
+database.conectar_admin()
+database.criar_tabela_admin()
 
 app = FastAPI()
 

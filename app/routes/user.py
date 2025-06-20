@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from app.models.user import User, UserVerify
-import app.db.connection as database
+import app.db._connection as database
 
 templates = Jinja2Templates(directory='app/templates/user')
 

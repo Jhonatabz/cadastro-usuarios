@@ -35,7 +35,7 @@ def verificar_login_usuario(email, senha):
     conn = conectar_usuarios()
     cursor = conn.cursor()
 
-    cursor.execute('SELECT senha_hash FROM usuarios WHERE email = ?', (email))
+    cursor.execute('SELECT senha_hash FROM usuarios WHERE email = ?', (email,))
     resultado = cursor.fetchone()
 
     conn.close()
@@ -104,7 +104,7 @@ def verificar_login_admin(email, senha):
     conn = conectar_admin()
     cursor = conn.cursor()
 
-    cursor.execute('SELECT senha_hash FROM admin WHERE email = ?', (email))
+    cursor.execute('SELECT senha_hash FROM admin WHERE email = ?', (email,))
     resultado = cursor.fetchone()
 
     conn.close()

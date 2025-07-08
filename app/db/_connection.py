@@ -47,6 +47,14 @@ def verificar_login_usuario(email, senha):
             return True
     return False
 
+def email_existe(email):
+    conn = conectar_usuarios()
+    cursor = conn.cursor()
+    cursor.execute("SELECT 1 FROM usuarios WHERE email = ?", (email,))
+    existe = cursor.fetchone() is not None
+    conn.close()
+    return existe
+
 def buscar_usuarios():
     try:
         conn = conectar_usuarios()

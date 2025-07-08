@@ -17,7 +17,8 @@ async def create_admin(request: Request):
 
 @admin_app.get("/admin/usuarios")
 async def read_users(request: Request):
-    return templates.TemplateResponse("usuarios.html", {"request": request})
+    usuarios = database.buscar_usuarios()
+    return templates.TemplateResponse("usuarios.html", {"request": request, "users": usuarios})
 
 @admin_app.post("/admin/login")
 async def login_admin(request: Request,

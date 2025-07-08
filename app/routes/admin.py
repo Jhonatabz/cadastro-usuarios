@@ -1,26 +1,27 @@
 from fastapi import APIRouter, Request, Form
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from app.models.admin import Admin, AdminVerify
 import app.db._connection as database
 
 templates = Jinja2Templates(directory="app/templates/admin")
 
-admin_app = APIRouter()
+admin_router = APIRouter(prefix="/admin", tags=["Administrador"])
 
-@admin_app.get("/admin/login")
+@admin_router.get("/login", response_class=HTMLResponse, status_code=200)
 async def login_admin(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
-@admin_app.get("/admin/cadastrar")
+@admin_router.get("/cadastrar", response_class=HTMLResponse, status_code=200)
 async def create_admin(request: Request):
     return templates.TemplateResponse("cadastro.html", {"request": request})
 
-@admin_app.get("/admin/usuarios")
+@admin_router.get("/usuarios", response_class=HTMLResponse, status_code=200)
 async def read_users(request: Request):
     usuarios = database.buscar_usuarios()
     return templates.TemplateResponse("usuarios.html", {"request": request, "users": usuarios})
 
-@admin_app.post("/admin/login")
+@admin_router.post("/login", response_class=HTMLResponse, status_code=200)
 async def login_admin(request: Request,
     email: str = Form(...),
     senha: str = Form(...)
@@ -32,7 +33,7 @@ async def login_admin(request: Request,
     else: 
         return templates.TemplateResponse("cadastro_error.html", {"request": request, "email": email})
 
-@admin_app.post("/admin/cadastrar")
+@admin_router.post("/cadastrar", response_class=HTMLResponse, status_code=200)
 async def create_admin(request: Request,
     nome: str = Form(...),
     email: str = Form(...),

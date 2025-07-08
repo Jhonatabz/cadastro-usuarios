@@ -12,8 +12,8 @@ app = FastAPI()
 from app.routes import home, user, admin
 
 app.include_router(home.home_app)
-app.include_router(user.user_app)
-app.include_router(admin.admin_app)
+app.include_router(user.user_router)
+app.include_router(admin.admin_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)

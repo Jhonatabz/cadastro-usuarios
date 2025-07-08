@@ -6,17 +6,17 @@ import app.db._connection as database
 
 templates = Jinja2Templates(directory='app/templates/user')
 
-user_router = APIRouter()
+user_router = APIRouter(prefix="/usuario", tags=["Usuário"])
 
-@user_router.get("/usuario/login", response_class=HTMLResponse, status_code=200)
+@user_router.get("/login", response_class=HTMLResponse, status_code=200)
 async def login_form(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
-@user_router.get("/usuario/cadastrar", response_class=HTMLResponse, status_code=200)
+@user_router.get("/cadastrar", response_class=HTMLResponse, status_code=200)
 async def cadastrar_form(request: Request):
     return templates.TemplateResponse("cadastro.html", {"request": request})
 
-@user_router.post("/usuario/login", response_class=HTMLResponse, status_code=200)
+@user_router.post("/login", response_class=HTMLResponse, status_code=200)
 async def login_user(request: Request,
     email: str = Form(...),
     senha: str = Form(...)
@@ -28,7 +28,7 @@ async def login_user(request: Request,
     else: 
         return templates.TemplateResponse("login_error.html", {"request": request, "email": email})
 
-@user_router.post('/usuario/cadastrar', response_class=HTMLResponse, status_code=200)
+@user_router.post('/cadastrar', response_class=HTMLResponse, status_code=200)
 async def create_user(request: Request,
     nome: str = Form(...),
     email: str = Form(...),

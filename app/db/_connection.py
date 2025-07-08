@@ -48,12 +48,17 @@ def verificar_login_usuario(email, senha):
     return False
 
 def buscar_usuarios():
-    conn = conectar_usuarios("usuarios")
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM usuarios")
-    usuarios = cursor.fetchall()
-    conn.close()
-    return usuarios
+    try:
+        conn = conectar_usuarios()
+        conn.row_factory = sqlite3.Row  # Retorna cada linha como um dicionário
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, nome, email FROM usuarios")
+        rows = cursor.fetchall()
+        usuarios = [dict(row) for row in rows]
+        return usuarios
+    finally:
+        conn.close()
+
 
 def atualizar_usuario(id, novo_nome, novo_email, nova_senha):
     conn = conectar_usuarios("usuarios")

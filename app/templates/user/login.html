@@ -78,20 +78,18 @@
 <body>
     <div class="container">
         <h1>Login</h1>
-    <form action="/usuario/login" method="post">
+        <form action="/usuario/login" method="post">
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
 
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha" required>
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required>
 
-        <button type="submit">Login</button>
-    </form>
+            <button type="submit">Login</button>
+        </form>
 
-    <form action="/usuario/cadastrar" method="get">
-        <button type="submit">Cadastrar</button>
-    </form>
+    <a href="/usuario/cadastrar" class="link-button">Cadastrar</a>
     </div>
     
 </body>

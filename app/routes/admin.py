@@ -31,7 +31,7 @@ async def login_admin(request: Request,
     if verificacao:
         return templates.TemplateResponse("login_response.html", {"request": request})
     else: 
-        return templates.TemplateResponse("cadastro_error.html", {"request": request, "email": email})
+        return templates.TemplateResponse("login_error.html", {"request": request, "email": email})
 
 @admin_router.post("/cadastrar", response_class=HTMLResponse, status_code=200)
 async def create_admin(request: Request,

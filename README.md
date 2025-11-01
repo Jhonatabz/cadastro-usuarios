@@ -38,9 +38,6 @@ pip install -r requirements.txt
 Como executar
 
 ```powershell
-# no venv ativado
-//IDEAPAD/Users/jhona/Documentos/pythonProjects/cadastro-usuarios/.venv/Scripts/python.exe -m uvicorn main:app --reload
-# ou, de forma genérica:
 python -m uvicorn main:app --reload
 ```
 
@@ -69,21 +66,8 @@ Observações de segurança
     python -m uvicorn main:app --reload
     ```
 
-- Recomendações adicionais para produção:
-    - Usar HTTPS (cookies seguros), configurar SameSite e Secure para cookies.
-    - Implementar proteção CSRF para formulários administrativos.
-    - Proteger rotas administrativas com autenticação/autorizações adequadas.
-
-Migração de senhas antigas
-- O projeto aceita atualmente hashes antigos em SHA256 como fallback, mas recomendo migrar esses usuários para bcrypt. Estratégias:
-    - Forçar reset de senha na primeira autenticação.
-    - Re-hash transparente no primeiro login (verificar SHA256 e re-hash para bcrypt).
-
 Testes
 - Não há testes automatizados por padrão. Recomendo adicionar testes com pytest + FastAPI TestClient cobrindo cadastro/login/logout e rotas protegidas.
-
-Contribuição
-- Pull requests são bem-vindos. Siga o padrão de código do projeto e adicione testes para mudanças comportamentais.
 
 Licença
 - MIT

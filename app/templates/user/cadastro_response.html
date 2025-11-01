@@ -70,5 +70,8 @@
         </tbody>
     </table>
     <a href="/usuario/login">Voltar para Login</a>
+    {% if user %}
+        <p>Logado como {{ user.email }} — <a href="/usuario/logout">Logout</a></p>
+    {% endif %}
 </body>
 </html>

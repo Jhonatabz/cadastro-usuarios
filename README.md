@@ -3,56 +3,87 @@
 Este projeto é uma aplicação web para cadastro e autenticação de usuários, desenvolvida com FastAPI, SQLite e Jinja2 Templates.
 
 ## Funcionalidades
+# Cadastro de Usuários
 
-- Cadastro de novos usuários
-- Login de usuários
-- Validação de email único
-- Hash de senha para segurança
-- Interface web com templates HTML
+Aplicação web simples para cadastro e autenticação de usuários construída com FastAPI, SQLite e Jinja2.
 
-## Tecnologias Utilizadas
+Principais funcionalidades
+- Cadastro de usuários (com hashing de senha)
+- Login / Logout com sessão baseada em cookie
+- Interface web com templates Jinja2 (rotas para usuário e administrador)
 
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [SQLite](https://www.sqlite.org/index.html)
-- [Jinja2](https://jinja.palletsprojects.com/)
-- [Pydantic](https://docs.pydantic.dev/)
+Stack
+- FastAPI
+- SQLite
+- Jinja2
+- passlib (bcrypt) para hashing de senha
 
-## Estrutura do Projeto
+Pré-requisitos
+- Python 3.10+ (recomendo usar virtualenv/venv)
 
-app/ 
-    ├── db/ # Conexão e operações com o banco de dados 
-    ├── models/ # Modelos Pydantic 
-    ├── routes/ # Rotas da aplicação 
-    └── templates/ # Templates HTML
+Instalação (local)
+1. Criar e ativar um virtualenv (Windows PowerShell):
 
-## Como Executar
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
 
-1. Clone o repositório:
-    ```bash
-    git clone https://github.com/seu-usuario/cadastro-usuarios.git
-    cd cadastro-usuarios
+2. Instalar dependências:
+
+```powershell
+pip install -r requirements.txt
+```
+
+Como executar
+
+```powershell
+# no venv ativado
+//IDEAPAD/Users/jhona/Documentos/pythonProjects/cadastro-usuarios/.venv/Scripts/python.exe -m uvicorn main:app --reload
+# ou, de forma genérica:
+python -m uvicorn main:app --reload
+```
+
+A aplicação estará disponível em:
+
+http://127.0.0.1:8000
+
+Endpoints principais (web)
+- /usuario/login — formulário de login
+- /usuario/cadastrar — formulário de cadastro
+- /usuario/logout — limpa sessão
+- /usuario/profile — página protegida do usuário
+- /admin/usuarios — lista de usuários (admin)
+- /admin/usuarios/deletar/{id} — excluir usuário (POST)
+
+Observações de segurança
+- As senhas são armazenadas com bcrypt via passlib (recomenda-se não usar SHA256 em produção).
+- A sessão é gerida com `starlette.middleware.sessions.SessionMiddleware` e requer um `SECRET_KEY`:
+
+    - Em produção, exporte uma variável de ambiente `SECRET_KEY` antes de iniciar a aplicação.
+
+    Exemplo (PowerShell):
+
+    ```powershell
+    $env:SECRET_KEY = 'uma-chave-secreta-muito-segura'
+    python -m uvicorn main:app --reload
     ```
 
-2. Instale as dependências:
-    ```bash
-    pip install fastapi uvicorn jinja2
-    ```
+- Recomendações adicionais para produção:
+    - Usar HTTPS (cookies seguros), configurar SameSite e Secure para cookies.
+    - Implementar proteção CSRF para formulários administrativos.
+    - Proteger rotas administrativas com autenticação/autorizações adequadas.
 
-3. Execute a aplicação:
-    ```bash
-    uvicorn app.main:app --reload
-    ```
+Migração de senhas antigas
+- O projeto aceita atualmente hashes antigos em SHA256 como fallback, mas recomendo migrar esses usuários para bcrypt. Estratégias:
+    - Forçar reset de senha na primeira autenticação.
+    - Re-hash transparente no primeiro login (verificar SHA256 e re-hash para bcrypt).
 
-4. Acesse no navegador:
-    ```
-    http://localhost:8000/usuario/login
-    ```
+Testes
+- Não há testes automatizados por padrão. Recomendo adicionar testes com pytest + FastAPI TestClient cobrindo cadastro/login/logout e rotas protegidas.
 
-## Observações
+Contribuição
+- Pull requests são bem-vindos. Siga o padrão de código do projeto e adicione testes para mudanças comportamentais.
 
-- As senhas são armazenadas de forma segura (hash SHA-256).
-- O projeto pode ser expandido para incluir autenticação por sessão ou JWT.
-
-## Licença
-
-Este projeto está sob a licença MIT.
+Licença
+- MIT

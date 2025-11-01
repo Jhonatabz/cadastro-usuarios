@@ -54,8 +54,14 @@
 
     <div class="container">
         <h1>Login realizado com sucesso!</h1>
-        <p>Seja bem-vindo ao sistema, usuário.</p>
-        <a href="/usuario/login" class="link-button">Ir para a página inicial</a>
+        {% if user %}
+            <p>Seja bem-vindo, {{ user.email }}.</p>
+            <a href="/usuario/profile" class="link-button">Ir para meu perfil</a>
+            <a href="/usuario/logout" class="link-button" style="margin-top:8px">Logout</a>
+        {% else %}
+            <p>Seja bem-vindo ao sistema, usuário.</p>
+            <a href="/usuario/login" class="link-button">Ir para a página inicial</a>
+        {% endif %}
     </div>
 
 </body>

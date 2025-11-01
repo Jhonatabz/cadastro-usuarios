@@ -78,6 +78,9 @@
 <body>
     <div class="container">
         <h1>Login</h1>
+        {% if user %}
+            <p>Você está logado como {{ user.email }}. <a href="/usuario/logout">Logout</a></p>
+        {% else %}
         <form action="/usuario/login" method="post">
 
             <label for="email">Email:</label>
@@ -89,7 +92,8 @@
             <button type="submit">Login</button>
         </form>
 
-    <a href="/usuario/cadastrar" class="link-button">Cadastrar</a>
+        <a href="/usuario/cadastrar" class="link-button">Cadastrar</a>
+        {% endif %}
     </div>
     
 </body>

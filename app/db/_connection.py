@@ -1,5 +1,7 @@
 import sqlite3
 import hashlib
+from passlib.context import CryptContext
+from passlib.exc import UnknownHashError
 
 def conectar_usuarios():
     return sqlite3.connect("app/db/usuarios.db")
@@ -18,10 +20,13 @@ def criar_tabela_usuarios():
     conn.commit()
     conn.close()
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
 def inserir_usuario(nome, email, senha):
     conn = conectar_usuarios()
     cursor = conn.cursor()
-    senha_hash = hashlib.sha256(senha.encode()).hexdigest()
+    senha_hash = pwd_context.hash(senha)
     try:
         cursor.execute("INSERT INTO usuarios (nome, email, senha_hash) VALUES (?, ?, ?)", (nome, email, senha_hash))
         conn.commit()
@@ -35,16 +40,22 @@ def verificar_login_usuario(email, senha):
     conn = conectar_usuarios()
     cursor = conn.cursor()
 
-    cursor.execute('SELECT senha_hash FROM usuarios WHERE email = ?', (email,))
+    cursor.execute('SELECT id, senha_hash FROM usuarios WHERE email = ?', (email,))
     resultado = cursor.fetchone()
 
     conn.close()
 
     if resultado:
-        senha_hash = resultado[0]
-        senha_informada_hash = hashlib.sha256(senha.encode()).hexdigest()
-        if senha_hash == senha_informada_hash:
-            return True
+        senha_hash = resultado[1]
+        try:
+            # try modern verification (bcrypt)
+            if pwd_context.verify(senha, senha_hash):
+                return True
+        except UnknownHashError:
+            # fallback for legacy SHA256 hex digest
+            senha_informada_hash = hashlib.sha256(senha.encode()).hexdigest()
+            if senha_hash == senha_informada_hash:
+                return True
     return False
 
 def email_existe(email):
@@ -69,14 +80,16 @@ def buscar_usuarios():
 
 
 def atualizar_usuario(id, novo_nome, novo_email, nova_senha):
-    conn = conectar_usuarios("usuarios")
+    conn = conectar_usuarios()
     cursor = conn.cursor()
-    cursor.execute("UPDATE usuarios SET nome = ?, email = ?, senha = ? WHERE id = ?", (novo_nome, novo_email, nova_senha, id))
+    # nova_senha deve ser passada em texto (ou previamente hashed); aqui assumimos texto e hashamos
+    senha_hash = pwd_context.hash(nova_senha)
+    cursor.execute("UPDATE usuarios SET nome = ?, email = ?, senha_hash = ? WHERE id = ?", (novo_nome, novo_email, senha_hash, id))
     conn.commit()
     conn.close()
 
 def deletar_usuario(id):
-    conn = conectar_usuarios("usuarios")
+    conn = conectar_usuarios()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM usuarios WHERE id = ?", (id,))
     conn.commit()
@@ -103,7 +116,7 @@ def criar_tabela_admin():
 def inserir_admin(nome, email, senha):
     conn = conectar_admin()
     cursor = conn.cursor()
-    senha_hash = hashlib.sha256(senha.encode()).hexdigest()
+    senha_hash = pwd_context.hash(senha)
     try:
         cursor.execute("INSERT INTO admin (nome, email, senha_hash) VALUES (?, ?, ?)", (nome, email, senha_hash))
         conn.commit()
@@ -124,7 +137,11 @@ def verificar_login_admin(email, senha):
 
     if resultado:
         senha_hash = resultado[0]
-        senha_informada_hash = hashlib.sha256(senha.encode()).hexdigest()
-        if senha_hash == senha_informada_hash:
-            return True
+        try:
+            if pwd_context.verify(senha, senha_hash):
+                return True
+        except UnknownHashError:
+            senha_informada_hash = hashlib.sha256(senha.encode()).hexdigest()
+            if senha_hash == senha_informada_hash:
+                return True
     return False

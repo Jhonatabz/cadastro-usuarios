@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, Form
+from fastapi.responses import RedirectResponse
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from app.models.admin import Admin, AdminVerify
@@ -20,6 +21,13 @@ async def create_admin(request: Request):
 async def read_users(request: Request):
     usuarios = database.buscar_usuarios()
     return templates.TemplateResponse("usuarios.html", {"request": request, "users": usuarios})
+
+
+@admin_router.post('/usuarios/deletar/{user_id}')
+async def delete_user(request: Request, user_id: int):
+    database.deletar_usuario(user_id)
+    # redirect back to the list
+    return RedirectResponse(url='/admin/usuarios', status_code=302)
 
 @admin_router.post("/login", response_class=HTMLResponse, status_code=200)
 async def login_admin(request: Request,
